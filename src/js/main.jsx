@@ -123,9 +123,16 @@ export default class SwipeToDelete extends React.Component {
 
   moveAt(e) {
     const target = this.regionContent.firstChild;
-    const res = this.device.getPageX(e) - this.model.startX;
-
-    target.style.left = `${res}px`;
+    const getPageY = this.device.getPageY(e);
+    const clientRect = this.regionContent.getBoundingClientRect()
+    if( getPageY >= clientRect.top &&  getPageY < ( clientRect.top + clientRect.height ) ){
+      const res = this.device.getPageX(e) - this.model.startX;
+      target.style.left = `${res}px`;
+    } else {
+      target.style.left = `${0}px`;
+      this.offInteract();
+    }
+    
   }
 
   callMoveCB(e) {
